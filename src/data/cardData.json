@@ -1,0 +1,52 @@
+{
+  "features": [
+    {
+      "id": 1,
+      "title": "Same-Day Delivery",
+      "description": "Get your packages delivered on the same day of order.",
+      "image": "/images/same-day-delivery.webp",
+      "availability": "Available in major cities",
+      "estimatedTime": "4-6 hours"
+    },
+    {
+      "id": 2,
+      "title": "Overnight Delivery",
+      "description": "Receive your packages the next morning.",
+      "image": "/images/overnight-delivery.webp",
+      "availability": "Nationwide",
+      "estimatedTime": "12 hours"
+    },
+    {
+      "id": 3,
+      "title": "International Shipping",
+      "description": "Ship your packages to over 200 countries worldwide.",
+      "image": "/images/international-shipping.webp",
+      "availability": "Worldwide",
+      "estimatedTime": "3-7 days"
+    },
+    {
+      "id": 4,
+      "title": "Package Tracking",
+      "description": "Track your package in real-time with our advanced tracking system.",
+      "image": "/images/package-tracking.webp",
+      "availability": "All packages",
+      "featureDetails": "Real-time updates, Notifications"
+    },
+    {
+      "id": 5,
+      "title": "Secure Packaging",
+      "description": "We ensure your packages are packed securely to prevent any damage.",
+      "image": "/images/secure-packaging.webp",
+      "availability": "All packages",
+      "featureDetails": "Bubble wrap, Fragile stickers"
+    },
+    {
+      "id": 6,
+      "title": "Customer Support",
+      "description": "24/7 customer support to assist you with your delivery needs.",
+      "image": "/images/customer-support.webp",
+      "availability": "All customers",
+      "contact": "support@deliveryservice.com, +123456789"
+    }
+  ]
+}
