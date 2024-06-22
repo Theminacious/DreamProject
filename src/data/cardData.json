@@ -11,7 +11,7 @@
     {
       "id": 2,
       "title": "Overnight Delivery",
-      "description": "Receive your packages the next morning.",
+      "description": "Receive your desired packages the next morning.",
       "image": "/images/overnight-delivery.webp",
       "availability": "Nationwide",
       "estimatedTime": "12 hours"
