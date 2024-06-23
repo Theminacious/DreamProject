@@ -1,7 +1,8 @@
+
 import HeroSection from '@/components/HeroSection'
 import OurFeatures from '../components/OurFeatures'
-import Scroll from '@/components/scroll';
-
+import Scroll from '@/components/Scroll';
+import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
   return (
@@ -9,6 +10,12 @@ export default function Home() {
    <HeroSection/>
    <OurFeatures/>
    <Scroll/>
+   <Testimonials/>
     </main>
   );
 }
+
+
+
+
+
