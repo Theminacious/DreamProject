@@ -1,6 +1,7 @@
 'use client'
 import Link from "next/link"
 import { HoverEffect } from "./ui/card-hover-effect"
+import { Meteors } from "./ui/meteors"
 
 
 const TechnologyWeUse = () => {
@@ -9,10 +10,12 @@ const TechnologyWeUse = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center">
           <h2 className="text-base text-teal-600 font-semibold tracking-wide uppercase">Technology We Use</h2>
+          
           <p className="mt-2 text-xl leading-8 font-extrabold md tracking-tight text-white sm:text-4xl">Innovative Technology Driving Our Delivery Services</p>
         </div>
         <div className="mt-10">
-        <HoverEffect items={technologyWeUse} />
+        <HoverEffect items={technologyWeUse}/>
+        
         </div>
         <div className="mt-10 text-center">
           <Link href={'/'}
