@@ -3,6 +3,7 @@ import HeroSection from '@/components/HeroSection'
 import OurFeatures from '../components/OurFeatures'
 import Scroll from '@/components/Scroll';
 import Testimonials from '@/components/Testimonials';
+import TechnologyWeUse from '@/components/TechnologyWeUse';
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
    <OurFeatures/>
    <Scroll/>
    <Testimonials/>
+   <TechnologyWeUse/>
     </main>
   );
 }
