@@ -80,9 +80,9 @@ export default function SignInForm() {
           className="text-center"
         >
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
-            Welcome Back to VeilChat
+            Welcome Back to Drop-N-GO
           </h1>
-          <p className="mb-4 text-gray-300">Sign in to continue your secret conversations</p>
+          <p className="mb-4 text-gray-300">Sign in to continue Shipping Your Product</p>
         </motion.div>
         <Form {...form}>
           <motion.form

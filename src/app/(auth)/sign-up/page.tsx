@@ -99,9 +99,9 @@ const SignUp = () => {
           className="text-center"
         >
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
-            Join VeilChat
+            Join Drop-N-GO
           </h1>
-          <p className="mb-4 text-gray-300">Sign up to start your anonymous adventure</p>
+          <p className="mb-4 text-gray-300">Sign up to Ship</p>
         </motion.div>
         <Form {...form}>
           <motion.form

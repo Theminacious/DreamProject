@@ -3,6 +3,7 @@ import CredentialProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
+import GoogleProvider from "next-auth/providers/google";
 
 
 export const authOptions: NextAuthOptions = {
@@ -48,7 +49,18 @@ export const authOptions: NextAuthOptions = {
 
             }
 
-        })
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_ID as string,
+            clientSecret: process.env.GOOGLE_SECRET as string,
+            authorization: {
+              params: {
+                prompt: "consent",
+                access_type: "offline",
+                response_type: "code"
+              }
+            }
+          })
     ],
     callbacks:{
         async jwt({token,user}){
