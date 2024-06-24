@@ -57,7 +57,7 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/enterprise">Enterprise</HoveredLink>
           </div>
         </MenuItem>
-        <Link href={'/Shipnow'}>
+        <Link href={'/sign-up'}>
         <MenuItem setActive={setActive} active={active} item="Ship Now" />
         </Link>
       </Menu>
