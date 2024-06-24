@@ -13,7 +13,7 @@ export async function sendVerificationEmail(
         await resend.emails.send({
             from:'onboarding@resend.dev',
             to:email,
-            subject:'DROP_N_GO || Verification OTP Email',
+            subject:'DROP-N-GO || Verification OTP Email',
             react:VerificationEmail({username,otp:verifyCode})
         })
 
