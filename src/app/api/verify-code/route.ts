@@ -1,77 +1,74 @@
-import dbConnect from '@/lib/dbConnect'
-import UserModel from '@/model/User'
-import {z} from 'zod'
-const verifyCodeSchema = z.object({
-    code:z.string().length(6,"Verifiaction code must be 6 digits")
-})
+import dbConnect from "@/lib/dbConnect";
+import UserModel from "@/model/User";
 
 
 export async function POST(request: Request) {
+
     await dbConnect();
     try {
-        const {username,code}=await request.json()
-        const decodedUsername = decodeURIComponent(username)
-        const user = await UserModel.findOne({
-            username:decodedUsername,
-        })
 
+        const {username,code} = await request.json();
+       const decodedUsername= decodeURIComponent(username)
+
+        const user = await UserModel.findOne({
+            username:decodedUsername
+        })
         if(!user){
-            return Response.json({
-                sucess:false,
-                message:"User not found"
-            },
-            {status:404}) 
+            return Response.json(
+                {
+                    success: false,
+                    message: "User not found",
+                },
+                {status: 404}
+            )
         }
-        const isCodeValid = user.verifyCode === code
+
+        const isCodeValid = user.verifyCode===code
         const isCodeNotExpired = new Date(user.verifyCodeExpiry)>new Date()
 
-       
-        if(user.isVerified){
-            return Response.json({
-                sucess:false,
-                message:"User already verified"
-            },
-            {status:400}) 
-        }
-
-
-
-        if(isCodeValid && isCodeNotExpired
-        ){
-            user.isVerified = true
+        if(isCodeValid && isCodeNotExpired){
+            user.isVerified=true
             await user.save()
-    
-            return Response.json({
-                sucess:true,
-                message:"User verified successfully"
-            },
-            {status:200})
-        }
-        else if(!isCodeValid){
-            return Response.json({
-                sucess:false,
-                message:"Invalid verification code"
-            },
-            {status:400}) 
+
+            return Response.json(
+                {
+                    success: true,
+                    message: " Account verified successfully",
+                },
+                {status: 200}
+            )
         }else if(!isCodeNotExpired){
-            return Response.json({
-                sucess:false,
-                message:"Verification code expired ! SignUp Again"
-            },
-            {status:400})
-
+            return Response.json(
+                {
+                    success: false,
+                    message: "Verification Code expired . Resend new verifcation code",
+                },
+                {status: 400}
+            )
+        }else{
+            return Response.json(
+                {
+                    success: false,
+                    message: "Invalid verification code",
+                },
+                {status: 400}
+            )
         }
 
-      
+
+
+    } catch (error) {
+        console.log("Error verifying user",error)
+        return Response.json(
+            {
+                success: false,
+                message: "Error verifying user",
+                
+            },
+            {status: 500}
+        )
 
         
-    } catch (error) {
-        console.error("Error Verifying User",error)
-        return Response.json({
-            sucess:false,
-            message:"Error Verifying User"
-        },
-        {status:500}) 
 
     }
-    }
+}

@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "./ui/navbar-menu";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
+import { useSession, signOut } from 'next-auth/react';
 
 
 
 export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
+const { data: session } = useSession();
+
   return (
     <div className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 ", className)}>
       <Menu setActive={setActive}>
@@ -59,9 +62,15 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/enterprise">Enterprise</HoveredLink>
           </div>
         </MenuItem>
-        <Link href={'/sign-up'}>
-        <MenuItem setActive={setActive} active={active} item="Ship Now" />
-        </Link>
+        {session  ? (
+          <div onClick={() => signOut()}>
+            <MenuItem setActive={setActive} active={active} item="Logout" />
+          </div>
+        ) : (
+          <Link href="/sign-up">
+            <MenuItem setActive={setActive} active={active} item="Ship Now" />
+          </Link>
+        )}
       </Menu>
     </div>
   );
