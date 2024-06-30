@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link"
 import { HoverEffect } from "./ui/card-hover-effect"
-import { Meteors } from "./ui/meteors"
+
 
 
 const TechnologyWeUse = () => {
