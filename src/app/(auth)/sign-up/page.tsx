@@ -64,7 +64,7 @@ const SignUp = () => {
         title: "Account created",
         description: response.data.message,
       });
-      router.replace(`/verify/username`);
+      router.replace(`/verify`);
     } catch (error) {
       console.error("Error in signup of user");
       const axiosError = error as AxiosError<ApiResponse>;
