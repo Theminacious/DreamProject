@@ -1,11 +1,18 @@
-import React from 'react'
+'use client'
+import DeliverForm from '@/components/Deliverydetail';
 
-const page = () => {
+const Page = () => {
   return (
-    <div>This is the dashboard you fuckers do u get that
-      
-    </div>
-  )
-}
+    <div className="min-h-screen bg-gray-100">
 
-export default page
+
+      <div className="flex justify-center mt-8 px-4">
+        <div className="max-w-lg w-full">
+          <DeliverForm />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Page;
