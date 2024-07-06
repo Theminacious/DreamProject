@@ -1,5 +1,4 @@
-// Import required modules and dependencies
-import { Request, Response } from 'express'; // Assuming use of Express.js
+
 import dbConnect from '@/lib/dbConnect';
 import DeliverydetailModel from '@/model/Deliverydetails';
 
