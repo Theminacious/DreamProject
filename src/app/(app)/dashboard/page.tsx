@@ -1,17 +1,16 @@
 'use client'
 import DeliverForm from '@/components/Deliverydetail';
+import HeroSectionDASH from '@/components/HeroSectionDASH';
+import TypeWriter from '@/components/TypeWriter'
 
 const Page = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
-
-
-      <div className="flex justify-center mt-8 px-4">
-        <div className="max-w-lg w-full">
+    <div className="min-h-screen ">
+      <HeroSectionDASH/>
+      <TypeWriter/>
+      
           <DeliverForm />
-        </div>
-      </div>
-    </div>
+          </div>
   );
 };
 
