@@ -1,9 +1,10 @@
+'use client';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import axios from 'axios';
-
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface FormData {
   pickupLocation: string;
@@ -32,6 +33,7 @@ const DeliveryForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [price, setPrice] = useState<number | null>(null);
+  const router = useRouter();
 
   const watchedFields = useWatch({ control });
 
@@ -74,9 +76,13 @@ const DeliveryForm = () => {
       };
 
       const response = await axios.post('/api/delivery-detail', requestData);
+      const id = response.data.id; // assuming the server returns an ID
       setSuccessMessage("Delivery details successfully submitted.");
       setPrice(response.data.price);
       console.log(response.data);
+
+      // Navigate to the details page with the ID
+      router.push(`/detail-payment?id=${id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -97,46 +103,43 @@ const DeliveryForm = () => {
 
   return (
     <>
-   
-    {/* <h1 className="text-center text-white mb-4">Get Your Service At Low Cost</h1> */}
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-screen-xl mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div>
-          <label htmlFor="pickupLocation" className="block text-sm font-medium text-gray-700">Pickup Location</label>
-          <input placeholder='Enter Pickup Location' {...register('pickupLocation')} id="pickupLocation" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
-          {errors.pickupLocation && <p className="text-red-500">{errors.pickupLocation.message}</p>}
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-screen-xl mx-auto p-4 bg-white shadow-md rounded-lg mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div>
+            <label htmlFor="pickupLocation" className="block text-sm font-medium text-gray-700">Pickup Location</label>
+            <input placeholder='Enter Pickup Location' {...register('pickupLocation')} id="pickupLocation" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
+            {errors.pickupLocation && <p className="text-red-500">{errors.pickupLocation.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="dropoffLocation" className="block text-sm font-medium text-gray-700">Dropoff Location</label>
+            <input {...register('dropoffLocation')} placeholder='Enter Drop Location' id="dropoffLocation" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
+            {errors.dropoffLocation && <p className="text-red-500">{errors.dropoffLocation.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700">Delivery Time</label>
+            <input type="datetime-local" {...register('deliveryTime')} id="deliveryTime" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
+            {errors.deliveryTime && <p className="text-red-500">{errors.deliveryTime.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="dimensions" className="block text-sm font-medium text-gray-700">Dimensions</label>
+            <input {...register('dimensions')} placeholder='Enter Item Dimension ' id="dimensions" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
+            {errors.dimensions && <p className="text-red-500">{errors.dimensions.message}</p>}
+          </div>
+          <div>
+            <label htmlFor="weight" className="block text-sm font-medium text-gray-700">Weight</label>
+            <input type="number" {...register('weight')} placeholder='Enter Item Weight' id="weight" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
+            {errors.weight && <p className="text-red-500">{errors.weight.message}</p>}
+          </div>
+        
+        <div className="mt-4">
+          <button type="submit" disabled={loading} className="w-full bg-black text-white rounded-lg shadow-md hover:bg-black focus:ring focus:ring-black disabled:opacity-50 p-2 text-center">
+            {loading ? "Loading..." : price !== null ? `Price: ₹${price.toFixed(2)}` : "Calculate Price"}
+          </button>
         </div>
-        <div>
-          <label htmlFor="dropoffLocation" className="block text-sm font-medium text-gray-700">Dropoff Location</label>
-          <input {...register('dropoffLocation')} placeholder='Enter Drop Location' id="dropoffLocation" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
-          {errors.dropoffLocation && <p className="text-red-500">{errors.dropoffLocation.message}</p>}
         </div>
-        <div>
-          <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700">Delivery Time</label>
-          <input type="datetime-local" {...register('deliveryTime')} id="deliveryTime" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
-          {errors.deliveryTime && <p className="text-red-500">{errors.deliveryTime.message}</p>}
-        </div>
-        <div>
-          <label htmlFor="dimensions" className="block text-sm font-medium text-gray-700">Dimensions</label>
-          <input {...register('dimensions')} placeholder='Enter Item Dimension ' id="dimensions" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
-          {errors.dimensions && <p className="text-red-500">{errors.dimensions.message}</p>}
-        </div>
-        <div>
-          <label htmlFor="weight" className="block text-sm font-medium text-gray-700">Weight</label>
-          <input type="number" {...register('weight')} placeholder='Enter Item Weight' id="weight" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black" />
-          {errors.weight && <p className="text-red-500">{errors.weight.message}</p>}
-        </div>
-      
-      <div className="mt-4">
-        <button type="submit" disabled={loading} className="w-full bg-black text-white rounded-lg shadow-md hover:bg-black focus:ring focus:ring-black disabled:opacity-50 p-2 text-center">
-          {loading ? "Loading..." : price !== null ? `Price: ₹${price.toFixed(2)}` : "Calculate Price"}
-        </button>
-      </div>
-      </div>
-      {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-      {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
-    </form>
+        {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+        {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+      </form>
     </>
   );
 };

@@ -6,7 +6,6 @@ export interface Deliverydetail extends Document {
     deliveryTime: Date;
     dimensions: string;
     weight: number;
-    // price is removed from the interface
 }
 
 const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
@@ -14,6 +13,9 @@ const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
         type: String,
         required: [true, "Pickup location is required"],
         trim: true
+    },
+    id: {
+        type: String,
     },
     dropoffLocation: {
         type: String,
@@ -26,7 +28,7 @@ const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
     },
     dimensions: {
         type: String,
-        required: [true, "Dimensions is required"],
+        required: [true, "Dimensions are required"],
         trim: true
     },
     weight: {
@@ -43,8 +45,11 @@ DeliverydetailSchema.virtual('price').get(function (this: Deliverydetail) {
     const dimensionFactor = 0.2; // price per dimension unit
     const deliveryTimeFactor = 1.5; // price factor based on delivery time urgency
 
+    // Convert dimensions to a numeric value if possible
+    const dimensionValue = parseFloat(this.dimensions);
+
     // Calculate price
-    const price = basePrice + (this.weight * weightFactor) + (parseFloat(this.dimensions) * dimensionFactor) + (deliveryTimeFactor);
+    const price = basePrice + (this.weight * weightFactor) + (dimensionValue * dimensionFactor) + (deliveryTimeFactor);
 
     return price;
 });
