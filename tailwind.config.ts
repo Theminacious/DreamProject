@@ -1,7 +1,8 @@
 import { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import colors from 'tailwindcss/colors';
-import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';  // Corrected import
+import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
+  // Corrected import
 
 const addVariablesForColors = ({ addBase, theme }: any) => {
   let allColors = flattenColorPalette(theme("colors"));
