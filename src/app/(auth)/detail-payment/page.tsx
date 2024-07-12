@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react'; // Import Suspense
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -141,4 +141,12 @@ const DetailsPage: React.FC = () => {
   );
 };
 
-export default DetailsPage;
+const DetailsPageWithSuspense: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DetailsPage />
+    </Suspense>
+  );
+};
+
+export default DetailsPageWithSuspense;
