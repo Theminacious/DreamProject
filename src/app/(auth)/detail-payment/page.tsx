@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import StripeWrapper from '@/components/PaymentForm';
 
 interface DetailsPageProps {
   pickupLocation: string;
@@ -47,7 +48,7 @@ const DetailsPage: React.FC = () => {
     }
   }, [id]);
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setLoading(true);
     // Implement payment logic here
     alert("Payment functionality to be implemented");
@@ -174,14 +175,7 @@ const DetailsPage: React.FC = () => {
       )}
       {paymentClicked && (
         <div className="mt-6 flex justify-center">
-          <motion.button
-            onClick={handlePayment}
-            className="bg-black text-white rounded-full shadow-md hover:bg-gray-800 focus:ring focus:ring-gray-700 px-6 py-3 text-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Confirm Payment
-          </motion.button>
+          <StripeWrapper amount={parseFloat(details.price) * 100} />
         </div>
       )}
       {packageStatus && (
