@@ -1,5 +1,5 @@
-'use client'
-import { useState, useEffect, Suspense } from 'react'; // Import Suspense
+'use client';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -13,33 +13,80 @@ interface DetailsPageProps {
   price: string;
 }
 
+interface PackageStatus {
+  currentLocation: string;
+  deliveryLocation: string;
+  estimatedDeliveryTime: string;
+}
+
 const DetailsPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
 
   const [details, setDetails] = useState<DetailsPageProps | null>(null);
+  const [packageStatus, setPackageStatus] = useState<PackageStatus | null>(null);
   const [paymentClicked, setPaymentClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
       // Fetch delivery detail by ID from the API
+      setLoading(true);
       axios.get(`/api/delivery-detail?id=${id}`)
         .then(response => {
           setDetails(response.data);
+          setLoading(false);
         })
         .catch(error => {
+          setError('Error fetching delivery details. Please try again.');
+          setLoading(false);
           console.error('Error fetching delivery details:', error);
         });
     }
   }, [id]);
 
   const handlePayment = () => {
+    setLoading(true);
     // Implement payment logic here
     alert("Payment functionality to be implemented");
-    // Example: Redirect to another page after payment
-    // window.location.href = '/payment';
+    // Fetch package status after payment
+    if (id) {
+      axios.get(`/api/track-package?id=${id}`)
+        .then(response => {
+          setPackageStatus(response.data);
+          setLoading(false);
+        })
+        .catch(error => {
+          setError('Error fetching package status. Please try again.');
+          setLoading(false);
+          console.error('Error fetching package status:', error);
+        });
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <img src="/loading.gif" alt="Loading" />
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   if (!details) {
     return (
@@ -136,6 +183,30 @@ const DetailsPage: React.FC = () => {
             Confirm Payment
           </motion.button>
         </div>
+      )}
+      {packageStatus && (
+        <motion.div
+          className="mt-6 bg-gray-100 p-6 rounded-lg shadow-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Package Status</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Current Location</label>
+              <p className="text-gray-800">{packageStatus.currentLocation}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Location</label>
+              <p className="text-gray-800">{packageStatus.deliveryLocation}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Delivery Time</label>
+              <p className="text-gray-800">{new Date(packageStatus.estimatedDeliveryTime).toLocaleString()}</p>
+            </div>
+          </div>
+        </motion.div>
       )}
     </motion.div>
   );

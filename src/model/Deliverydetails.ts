@@ -1,21 +1,23 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface Deliverydetail extends Document {
+    id: string;
     pickupLocation: string;
     dropoffLocation: string;
     deliveryTime: Date;
     dimensions: string;
     weight: number;
+    price: number; // Add price to the interface
 }
 
 const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
+    id: {
+        type: String,
+    },
     pickupLocation: {
         type: String,
         required: [true, "Pickup location is required"],
         trim: true
-    },
-    id: {
-        type: String,
     },
     dropoffLocation: {
         type: String,
@@ -56,8 +58,8 @@ DeliverydetailSchema.virtual('price').get(function (this: Deliverydetail) {
 
 // Ensure virtual fields are included when converting to JSON
 DeliverydetailSchema.set('toJSON', { virtuals: true });
-DeliverydetailSchema.set('toObject', { virtuals: true });
+DeliverydetailSchema.set('toObject', { virtuals: true }); // Add the closing parenthesis
 
-const DeliverydetailModel = (mongoose.models.Deliverydetail as mongoose.Model<Deliverydetail>) || mongoose.model('Deliverydetail', DeliverydetailSchema);
+const DeliverydetailModel: Model<Deliverydetail> = mongoose.models.Deliverydetail || mongoose.model('Deliverydetail', DeliverydetailSchema);
 
 export default DeliverydetailModel;
