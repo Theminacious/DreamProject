@@ -1,3 +1,4 @@
+// pages/details.tsx
 'use client';
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -50,9 +51,7 @@ const DetailsPage: React.FC = () => {
 
   const handlePayment = async () => {
     setLoading(true);
-    // Implement payment logic here
     alert("Payment functionality to be implemented");
-    // Fetch package status after payment
     if (id) {
       axios.get(`/api/track-package?id=${id}`)
         .then(response => {
@@ -175,7 +174,7 @@ const DetailsPage: React.FC = () => {
       )}
       {paymentClicked && (
         <div className="mt-6 flex justify-center">
-          <StripeWrapper amount={parseFloat(details.price) * 100} />
+          <StripeWrapper amount={Number(details.price) * 100} />
         </div>
       )}
       {packageStatus && (
