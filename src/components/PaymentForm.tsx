@@ -1,4 +1,4 @@
-// components/PaymentForm.tsx
+
 import { useState, useEffect } from 'react';
 import { loadStripe, PaymentRequest } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement, PaymentRequestButtonElement } from '@stripe/react-stripe-js';
