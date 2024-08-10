@@ -1,101 +1,65 @@
-
-import { useState, useEffect } from 'react';
-import { loadStripe, PaymentRequest } from '@stripe/stripe-js';
-import { Elements, useStripe, useElements, CardElement, PaymentRequestButtonElement } from '@stripe/react-stripe-js';
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 interface PaymentFormProps {
   amount: number;
+  deliveryDetails: {
+    pickupLocation: string;
+    dropoffLocation: string;
+    deliveryTime: string;
+    dimensions: string;
+    weight: string;
+  };
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({ amount, deliveryDetails }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi'>('card');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
-  const [canMakePayment, setCanMakePayment] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (stripe && paymentMethod === 'upi') {
-      const pr = stripe.paymentRequest({
-        country: 'IN',
-        currency: 'inr',
-        total: {
-          label: 'Total',
-          amount,
-        },
-        requestPayerName: true,
-        requestPayerEmail: true,
-      });
-
-      pr.canMakePayment().then(result => {
-        setCanMakePayment(!!result);
-      });
-
-      setPaymentRequest(pr);
-    }
-  }, [stripe, amount, paymentMethod]);
+  const [trackingId, setTrackingId] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!stripe || !elements) return;
 
-    const { data: { clientSecret } } = await axios.post('/api/create-payment-intent', { amount, paymentMethodType: paymentMethod });
+    try {
+      const { data } = await axios.post('/api/create-payment-intent', {
+        amount,
+        deliveryDetails,
+      });
 
-    let result;
-    if (paymentMethod === 'card') {
-      result = await stripe.confirmCardPayment(clientSecret, {
+      const { clientSecret, trackingId } = data;
+
+      setTrackingId(trackingId);
+
+      const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement)!,
         },
       });
-    } else if (paymentRequest) {
-      // Ensure paymentRequest is not null
-      result = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: window.location.href,
-        },
-      });
-    } else {
-      setErrorMessage('UPI payment is not available.');
-      return;
-    }
 
-    if (result.error) {
-      setErrorMessage(result.error.message || 'Payment failed');
-    } else {
-      if (result.paymentIntent?.status === 'succeeded') {
-        alert('Payment succeeded!');
+      if (result.error) {
+        setErrorMessage(result.error.message || 'Payment failed');
+      } else {
+        if (result.paymentIntent?.status === 'succeeded') {
+          alert('Payment succeeded!');
+          // Display tracking ID to the user
+          alert(`Your tracking ID is: ${trackingId}`);
+        }
       }
+    } catch (error) {
+      setErrorMessage('An error occurred while processing the payment.');
+      console.error('Payment Error:', error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md mx-auto">
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Select Payment Method</label>
-        <select
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value as 'card' | 'upi')}
-          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        >
-          <option value="card">Card</option>
-          <option value="upi">UPI</option>
-        </select>
-      </div>
-
-      {paymentMethod === 'card' && <CardElement className="p-4 border border-gray-300 rounded-lg" />}
-      {paymentMethod === 'upi' && canMakePayment && paymentRequest && (
-        <PaymentRequestButtonElement options={{ paymentRequest }} />
-      )}
-      {paymentMethod === 'upi' && !canMakePayment && (
-        <div className="text-red-500">UPI payment is not available on this device/browser.</div>
-      )}
-
+      <CardElement className="p-4 border border-gray-300 rounded-lg" />
       {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
       <button
         type="submit"
@@ -108,10 +72,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
   );
 };
 
-const StripeWrapper: React.FC<PaymentFormProps> = ({ amount }) => {
+const StripeWrapper: React.FC<PaymentFormProps> = ({ amount, deliveryDetails }) => {
   return (
     <Elements stripe={stripePromise}>
-      <PaymentForm amount={amount} />
+      <PaymentForm amount={amount} deliveryDetails={deliveryDetails} />
     </Elements>
   );
 };

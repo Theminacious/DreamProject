@@ -8,6 +8,7 @@ export interface Deliverydetail extends Document {
     dimensions: string;
     weight: number;
     price: number; // Add price to the interface
+    trackingId?: string;
 }
 
 const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
@@ -36,7 +37,11 @@ const DeliverydetailSchema: Schema<Deliverydetail> = new Schema({
     weight: {
         type: Number,
         required: [true, "Weight is required"]
-    }
+    },
+    trackingId: {
+        type: String,
+        default: null,
+      },
 });
 
 // Add a virtual property to calculate the price

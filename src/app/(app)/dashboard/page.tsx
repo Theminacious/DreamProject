@@ -1,6 +1,7 @@
 'use client'
 import DeliverForm from '@/components/Deliverydetail';
 import HeroSectionDASH from '@/components/HeroSectionDASH';
+import TrackPackage from '@/components/TrackPage';
 import TypeWriter from '@/components/TypeWriter'
 
 const Page = () => {
@@ -10,6 +11,7 @@ const Page = () => {
       <TypeWriter/>
       
           <DeliverForm />
+      <TrackPackage/>        
           </div>
   );
 };
