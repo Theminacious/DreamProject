@@ -11,7 +11,9 @@ const HeroSection = () => {
         <h1 className='mt-20 md:mt-0 text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 '>
           Deliver At Your Choice
         </h1>
-        <p className='mt-4 font-normal text-base md:text-lg text-neutral-300 max-1-lg mx-auto'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis laboriosam qui ratione molestiae in quisquam dignissimos, doloribus voluptatibus. Recusandae fugit omnis impedit nostrum fugiat modi, explicabo odio quis atque tenetur eum aliquid totam quia quae odit ipsum asperiores. Fugit, accusamus?</p>
+        <p className='mt-4 font-normal text-base md:text-lg text-neutral-300 max-1-lg mx-auto'>
+          Dropngo is your go-to solution for convenient and reliable delivery services. Whether you need to send a package across town or across the country, we&apos;ve got you covered. Our platform ensures timely and secure deliveries, giving you peace of mind. Experience the ease of scheduling and tracking your deliveries with Dropngo.
+        </p>
         <div className='mt-4'>
         <Link href={"/"}>
             <Button
@@ -22,6 +24,7 @@ const HeroSection = () => {
         </div>
         
       </div>
+      
     </div>
   )
 }

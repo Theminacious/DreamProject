@@ -1,6 +1,6 @@
 
 import { StickyScroll } from "./ui/sticky-scroll-reveal";
-import Image from "next/image";
+
 
 const deliveryContent = [
   {
@@ -19,13 +19,8 @@ const deliveryContent = [
       "Require special handling for fragile items? We offer specialized packaging and handling to ensure delicate shipments reach their destination intact.",
     content: (
         <div className="h-full w-full  flex items-center justify-center text-white">
-        <Image
-          src="https://cdn.pixabay.com/photo/2016/07/27/15/56/link-1545625_960_720.jpg"
-          width={300}
-          height={300}
-          className="h-full w-full object-cover"
-          alt="linear board demo"
-        />
+        
+        Special Handling
       </div>
     ),
   },
