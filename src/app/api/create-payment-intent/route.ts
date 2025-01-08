@@ -1,5 +1,4 @@
-import { NextApiResponse } from 'next';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import dbConnect from '@/lib/dbConnect';
 import DeliverydetailModel from '@/model/Deliverydetails';
@@ -13,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20',
 });
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
 
@@ -42,16 +41,16 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
     if (paymentSuccess) {
       // Return client secret and tracking ID
-      res.status(200).json({
+      return NextResponse.json({
         clientSecret: paymentIntent.client_secret,
         trackingId,
         message: 'Payment successful and tracking ID generated',
       });
     } else {
-      res.status(400).json({ message: 'Payment failed' });
+      return NextResponse.json({ message: 'Payment failed' }, { status: 400 });
     }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-    res.status(400).json({ error: errorMessage });
+    return NextResponse.json({ error: errorMessage }, { status: 400 });
   }
 }
