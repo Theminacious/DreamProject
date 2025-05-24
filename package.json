@@ -35,7 +35,7 @@
     "heroicons": "^2.1.4",
     "lucide-react": "^0.394.0",
     "micro": "^10.0.1",
-    "mongoose": "^8.4.1",
+    "mongoose": "^8.9.5",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
     "openai": "^4.50.0",
